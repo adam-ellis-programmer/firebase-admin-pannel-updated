@@ -10,6 +10,7 @@ import EmailSignin from './pages/EmailSignin'
 import NewSignup from './pages/NewSignup'
 import ProfilePage from './pages/ProfilePage'
 import AdminManageUsers from './pages/AdminManageUsers'
+import PrivateRouteLoggedIn from './components/PrivateRouteLoggedIn'
 
 function App() {
   return (
@@ -23,10 +24,14 @@ function App() {
           <Route path='/new-signup' element={<NewSignup />} />
           <Route path='/admin-manage-users' element={<AdminManageUsers />} />
 
-          {/* Private Routes */}
+          {/* Private Routes must be admin */}
           <Route element={<PrivateRoute />}>
-            <Route path='/me' element={<ProfilePage />} />
             <Route path='/admin' element={<Admin />} />
+          </Route>
+
+          {/* Private Routes must be logged in */}
+          <Route element={<PrivateRouteLoggedIn />}>
+            <Route path='/me' element={<ProfilePage />} />
           </Route>
         </Routes>
       </Router>

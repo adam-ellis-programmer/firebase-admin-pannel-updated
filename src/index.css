@@ -6,7 +6,8 @@
   --primary-font-one: 'Titillium Web', sans-serif;
   --page-container-width: 90%;
   --warning: #a62b1f;
-  --box-shadow: 1px 3px 30px rgba(0, 0, 0, 0.1), -1px -3px 30px rgba(0, 0, 0, 0.1);
+  --box-shadow: 1px 3px 30px rgba(0, 0, 0, 0.1),
+    -1px -3px 30px rgba(0, 0, 0, 0.1);
 }
 
 .nav-logo {
@@ -24,14 +25,16 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
-    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
 }
 
 * {
@@ -775,4 +778,19 @@ nav {
   height: 3px;
   background-color: red;
   border-radius: 10px;
+}
+
+.test-btn-wrap {
+  display: flex;
+  justify-self: end;
+}
+
+.test-btn {
+  background: #2c325a;
+  border: none;
+  font-size: 1rem;
+  padding: 0.4rem;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
 }
