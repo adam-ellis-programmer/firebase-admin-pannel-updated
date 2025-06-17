@@ -1,14 +1,25 @@
 import { useState, useEffect } from 'react'
-import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from 'firebase/auth'
 import { setDoc, doc, serverTimestamp } from 'firebase/firestore'
 import { db } from '../../firebase.config'
 import SectionHeader from '../../layout/SectionHeader'
 import FormLinkToBtn from '../buttons/FormLinkToBtn'
 
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from 'firebase/storage'
 import UserAlert from '../../alerts/UserAlert'
+import { useNavigate } from 'react-router-dom'
 
 const NewSignUpPublic = () => {
+  const navigate = useNavigate()
   const [file, setFile] = useState('')
   const [alertMsg, setAlertMsg] = useState('')
   const [alert, setAlert] = useState(false)
@@ -44,7 +55,8 @@ const NewSignUpPublic = () => {
       uploadTask.on(
         'state_changed',
         (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
           console.log('Upload is ' + progress + '% done')
           switch (snapshot.state) {
             case 'paused':
@@ -97,7 +109,11 @@ const NewSignUpPublic = () => {
     try {
       const auth = getAuth()
 
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      )
 
       const user = userCredential.user
       const userId = auth && auth?.currentUser?.uid
@@ -136,8 +152,9 @@ const NewSignUpPublic = () => {
       // const url = await uploadProfilePicture()
       // only need two objects here for setDoc
       await setDoc(doc(db, 'users', user.uid), formDataCopy)
-      await setDoc(doc(db, 'stats', user.uid), stats)
+      // await setDoc(doc(db, 'stats', user.uid), stats)
       // await setDoc(doc(db, 'stats', user.uid), {})
+      navigate('/')
     } catch (error) {
       console.log(error)
       // setAlertMsg('')
@@ -153,76 +170,76 @@ const NewSignUpPublic = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="form">
+    <form onSubmit={handleSubmit} className='form'>
       <SectionHeader text={`signup to use our services`} />
-      <div className="form-control">
+      <div className='form-control'>
         {alert && <UserAlert text={alertMsg} />}
-        <label className="form-label" htmlFor="name">
+        <label className='form-label' htmlFor='name'>
           name
         </label>
         <input
           onChange={onChange}
-          id="name"
-          type="text"
-          className="form-input"
-          placeholder="name"
+          id='name'
+          type='text'
+          className='form-input'
+          placeholder='name'
           value={name}
         />
       </div>
 
-      <div className="form-control">
-        <label className="form-label" htmlFor="email">
+      <div className='form-control'>
+        <label className='form-label' htmlFor='email'>
           email
         </label>
         <input
           onChange={onChange}
-          id="email"
-          type="text"
-          className="form-input"
-          placeholder="email"
+          id='email'
+          type='text'
+          className='form-input'
+          placeholder='email'
           value={email}
         />
       </div>
 
-      <div className="form-control">
-        <label className="form-label" htmlFor="password">
+      <div className='form-control'>
+        <label className='form-label' htmlFor='password'>
           password
         </label>
 
         <input
           onChange={onChange}
-          id="password"
-          type="text"
-          className="form-input"
-          placeholder="password"
+          id='password'
+          type='text'
+          className='form-input'
+          placeholder='password'
           value={password}
         />
       </div>
 
-      <div className="form-control">
-        <label className="form-label" htmlFor="confirmPassword">
+      <div className='form-control'>
+        <label className='form-label' htmlFor='confirmPassword'>
           confirm password
         </label>
         <input
           onChange={onChange}
-          id="confirmPassword"
-          type="text"
-          className="form-input"
-          placeholder="confirmPassword"
+          id='confirmPassword'
+          type='text'
+          className='form-input'
+          placeholder='confirmPassword'
           value={confirmPassword}
         />
       </div>
       <input
         onChange={handleFileChange}
-        className="file-input signup-img-input"
-        type="file"
-        name=""
-        id=""
+        className='file-input signup-img-input'
+        type='file'
+        name=''
+        id=''
       />
       <FormLinkToBtn link={`/email-signin`} text={`signin`} />
 
-      <div className="form-btn-container">
-        <button className="signup-btn">signup</button>
+      <div className='form-btn-container'>
+        <button className='signup-btn'>signup</button>
       </div>
     </form>
   )

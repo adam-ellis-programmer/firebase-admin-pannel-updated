@@ -76,22 +76,46 @@ const AdminManageUsers = () => {
       const functions = getFunctions()
       const getUser = httpsCallable(functions, 'getUser')
       const res = await getUser({ email: userEmail })
+      console.log('RES===>', res)
       const user = res.data.user
       console.log(user)
       setUserUid(user.uid)
       const claims = user?.customClaims?.auth
-      // ...spread and set the formData values to true / false
-      // console.log(claims)
+      console.log('CLAIMS====>', claims)
 
-      claims &&
+      // Check if claims exist and are valid
+      if (claims && typeof claims === 'object') {
+        // Set the admin check data with the claims
         setAdminCheckData((prevState) => ({
-          // ** for UI VISUAL Purpouses only  **
           ...prevState,
-          admin: claims?.admin,
-          premium: claims?.premium,
-          manager: claims?.manager,
-          sales: claims?.sales,
+          admin: claims?.admin || false,
+          premium: claims?.premium || false,
+          manager: claims?.manager || false,
+          sales: claims?.sales || false,
         }))
+
+        // Check if all values are false
+        const allFalse = Object.values(claims).every((value) => value === false)
+
+        setAlertText(
+          allFalse
+            ? 'all access is unchecked'
+            : 'success - see check boxes below'
+        )
+      } else {
+        // Handle case where claims don't exist or are invalid
+        setAdminCheckData((prevState) => ({
+          ...prevState,
+          admin: false,
+          premium: false,
+          manager: false,
+          sales: false,
+        }))
+
+        setAlertText(
+          'User does not have any valid claims yet. Please add some.'
+        )
+      }
 
       setAlertType('get-user')
       setAlert(true)
@@ -99,13 +123,6 @@ const AdminManageUsers = () => {
       setAlertSuccess(true)
       setDisabled(false)
       setButtonLoader(false)
-
-      // check  if all values are false if so ....
-      const allFalse = Object.values(claims).every((value) => value === false)
-
-      allFalse
-        ? setAlertText('all access is unchecked')
-        : setAlertText('success - see check boxes below')
     } catch (error) {
       // get custom info from the error.details obj
       const code = error.code
@@ -224,32 +241,32 @@ const AdminManageUsers = () => {
   //   return <h4>not allowed</h4>
   // }
   return (
-    <div className="page-container">
+    <div className='page-container'>
       <PageHeader text={`Admin Dashboard - Manage Users`} />
-      <section className="admin-manage-section">
-        <div className="admin-col">
+      <section className='admin-manage-section'>
+        <div className='admin-col'>
           <SectionHeader text={`create new user`} />
           <CreateNewUser />
           <UpdateUserProfilePicture />
         </div>
-        <div className="admin-col">
+        <div className='admin-col'>
           <SectionHeader text={`manage user access status`} />
           <form onSubmit={handleGetUser}>
             {alert && alertType === 'get-user' && (
               <AdminAlert alertText={alertText} alertSuccess={alertSuccess} />
             )}
-            <div className="admin-form-group">
+            <div className='admin-form-group'>
               <input
                 onChange={(e) => setUserEmail(e.target.value)}
-                className="admin-input"
-                type="text"
-                placeholder="enter email"
+                className='admin-input'
+                type='text'
+                placeholder='enter email'
                 value={userEmail}
               />
             </div>
 
-            <div className="admin-btn-container">
-              <button className="admin-submit-btn">
+            <div className='admin-btn-container'>
+              <button className='admin-submit-btn'>
                 {buttonLoader && btnLoaderName === 'get-user'
                   ? 'getting user...'
                   : 'get user'}
@@ -257,34 +274,34 @@ const AdminManageUsers = () => {
             </div>
           </form>
           {/* === */}
-          <form onSubmit={handleUpdateClaims} className="claims-form-admin">
+          <form onSubmit={handleUpdateClaims} className='claims-form-admin'>
             {alert && alertType === 'update-claims' && (
               <AdminAlert alertText={alertText} alertSuccess={alertSuccess} />
             )}
-            <div className="admin-form-group check-all-div">
+            <div className='admin-form-group check-all-div'>
               {/* MAKE RADIO BUTTONS */}
               {/* MAKE RADIO BUTTONS */}
               {/* MAKE RADIO BUTTONS */}
               {/* MAKE RADIO BUTTONS */}
-              <label htmlFor="check all" className="admin-check-label">
+              <label htmlFor='check all' className='admin-check-label'>
                 <input
                   onChange={handleSetAll}
-                  className="admin-checkbox"
-                  id="check all"
-                  type="checkbox"
-                  name="check all"
+                  className='admin-checkbox'
+                  id='check all'
+                  type='checkbox'
+                  name='check all'
                   checked={checkAll}
                 />
                 <span>check all</span>
               </label>
             </div>
-            <div className="admin-form-group">
-              <label htmlFor="admin" className="admin-check-label">
+            <div className='admin-form-group'>
+              <label htmlFor='admin' className='admin-check-label'>
                 <input
-                  className="admin-checkbox"
-                  id="admin"
-                  type="checkbox"
-                  name="admin"
+                  className='admin-checkbox'
+                  id='admin'
+                  type='checkbox'
+                  name='admin'
                   onChange={handleCheckedChanges}
                   value={admin}
                   checked={admin}
@@ -293,13 +310,13 @@ const AdminManageUsers = () => {
               </label>
             </div>
 
-            <div className="admin-form-group">
-              <label htmlFor="manager" className="admin-check-label">
+            <div className='admin-form-group'>
+              <label htmlFor='manager' className='admin-check-label'>
                 <input
-                  className="admin-checkbox"
-                  id="manager"
-                  type="checkbox"
-                  name="manager"
+                  className='admin-checkbox'
+                  id='manager'
+                  type='checkbox'
+                  name='manager'
                   onChange={handleCheckedChanges}
                   value={manager}
                   checked={manager}
@@ -308,13 +325,13 @@ const AdminManageUsers = () => {
               </label>
             </div>
 
-            <div className="admin-form-group">
-              <label htmlFor="premium" className="admin-check-label">
+            <div className='admin-form-group'>
+              <label htmlFor='premium' className='admin-check-label'>
                 <input
-                  className="admin-checkbox"
-                  id="premium"
-                  type="checkbox"
-                  name="premium"
+                  className='admin-checkbox'
+                  id='premium'
+                  type='checkbox'
+                  name='premium'
                   onChange={handleCheckedChanges}
                   value={premium}
                   checked={premium}
@@ -323,13 +340,13 @@ const AdminManageUsers = () => {
               </label>
             </div>
 
-            <div className="admin-form-group">
-              <label htmlFor="sales" className="admin-check-label">
+            <div className='admin-form-group'>
+              <label htmlFor='sales' className='admin-check-label'>
                 <input
-                  className="admin-checkbox"
-                  id="sales"
-                  type="checkbox"
-                  name="sales"
+                  className='admin-checkbox'
+                  id='sales'
+                  type='checkbox'
+                  name='sales'
                   onChange={handleCheckedChanges}
                   value={sales}
                   checked={sales}
@@ -337,11 +354,11 @@ const AdminManageUsers = () => {
                 <span>sales</span>
               </label>
             </div>
-            <div className="admin-btn-container">
+            <div className='admin-btn-container'>
               <button
                 disabled={disabled}
                 // onClick={handleUpdateClaims}
-                className="admin-submit-btn"
+                className='admin-submit-btn'
               >
                 {buttonLoader && btnLoaderName === 'update-claims'
                   ? 'updating user...'
@@ -354,7 +371,7 @@ const AdminManageUsers = () => {
 
           <ChangeUserPassword />
         </div>
-        <div className="admin-col">
+        <div className='admin-col'>
           <SectionHeader text={`delete user`} />
 
           <DeleteUser />
@@ -362,8 +379,8 @@ const AdminManageUsers = () => {
           <SectionHeader text={`update user`} />
           <UpdatUserProfile />
         </div>
-        <div className="admin-col">
-          <div className="users-container">
+        <div className='admin-col'>
+          <div className='users-container'>
             <ViewAllUsers />
           </div>
         </div>
