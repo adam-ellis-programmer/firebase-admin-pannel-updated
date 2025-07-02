@@ -12,7 +12,7 @@ const TestUserSignIn = () => {
       const auth = getAuth()
       const user = await signInWithEmailAndPassword(
         auth,
-        'test-user@gmail.com',
+        'test-user@test.com',
         '111111'
       )
       navigate('/')
